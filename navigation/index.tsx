@@ -20,6 +20,7 @@ import LinkingConfiguration from './LinkingConfiguration';
 import AccountScreen from '../screens/AccountScreen';
 import BookingScreen from '../screens/BookingScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
+import DetailsScreen from '../screens/DetailsScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -41,6 +42,9 @@ function RootNavigator() {
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
+      <Stack.Group>
+        <Stack.Screen name="Detail" component={DetailsScreen} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 }
@@ -61,6 +65,7 @@ function BottomTabNavigator() {
         component={HomeScreen}
         options={({ navigation }: RootTabScreenProps<'Home'>) => ({
           title: 'Home',
+          headerShown: false,
           headerStyle: {
             backgroundColor: Colors[colorScheme].cyan,
           },
@@ -69,11 +74,28 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => navigation.navigate('Detail')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
               <MaterialCommunityIcons name={'information-variant'} size={25} style={{ marginRight: 15 }} />
+            </Pressable>
+          ),
+        })}
+      />
+      <BottomTab.Screen
+        name="Detail"
+        component={DetailsScreen}
+        options={({ navigation }: RootTabScreenProps<'Detail'>) => ({
+          title: 'Detail',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="allergy" color={color} />,
+          headerRight: () => (
+            <Pressable
+              onPress={() => navigation.navigate('Modal')}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
             </Pressable>
           ),
         })}

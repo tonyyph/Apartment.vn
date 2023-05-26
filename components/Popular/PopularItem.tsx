@@ -18,12 +18,13 @@ interface PopularItemProps {
         title?: string;
         weight?: string;
     };
+    onPress?: () => void;
 }
 
-const PopularItem: FC<PopularItemProps> = ({ data }) => {
+const PopularItem: FC<PopularItemProps> = ({ data, onPress }) => {
     return (
         <View style={styles.container}>
-            <View style={styles.cardPopularWrapper}>
+            <TouchableOpacity style={styles.cardPopularWrapper} onPress={onPress}>
 
                 <View style={styles.topPopularTitle}>
                     {/* <Image source={data?.image} style={styles.iconCrown} /> */}
@@ -44,7 +45,7 @@ const PopularItem: FC<PopularItemProps> = ({ data }) => {
                 <View style={styles.cardPopular}>
                     <Image style={styles.imagePopular} source={data?.image} />
                 </View>
-            </View>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
         elevation: 6,
     },
     cardPopularWrapper: {
+        opacity: 1,
         width: '98%',
         marginLeft: '1%',
         marginTop: 4,

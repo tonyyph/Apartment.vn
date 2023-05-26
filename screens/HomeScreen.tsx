@@ -1,15 +1,99 @@
-import { StyleSheet } from 'react-native';
-import Colors from '../constants/Colors';
-import EditScreenInfo from '../components/EditScreenInfo';
+import { MaterialCommunityIcons, EvilIcons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
+import { FlatList, Image, Platform, SafeAreaView, ScrollView, StyleSheet, TextInput } from 'react-native';
+import categoriesData from '../assets/data/categoriesData';
+import popularData from '../assets/data/popularData';
+import CategoriesItem from '../components/Category/CategoriesItem';
+import PopularItem from '../components/Popular/PopularItem';
 import { Text, View } from '../components/Themed';
+import Colors from '../constants/Colors';
+import Navigation from '../navigation';
 import { RootTabScreenProps } from '../types';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
+
+    const renderCategoryItem = (item: any) => {
+        const CategoryItem = item?.item
+        return (
+            <CategoriesItem data={CategoryItem} onPress={() => navigation.navigate('Detail')} />
+            // onPress={() => goToDetail()} 
+        )
+    };
+
+    const goToDetail = (item: any) => {
+        return (
+            alert('Hello from HomeScreen')
+        );
+    }
+
+    const renderPopularItem = (item: any) => {
+        return (
+            <PopularItem data={item?.item} onPress={() => navigation.navigate('Detail')} />
+        )
+    }
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Home Screen</Text>
-            {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-            <EditScreenInfo path="/screens/HomeScreen.tsx" /> */}
+        <View
+            style={styles.container}
+        >
+            {/* <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'auto'} /> */}
+            <ScrollView
+                style={styles.mainContainer}
+                showsVerticalScrollIndicator={false}
+            >
+                {/* <Text style={styles.title}>Account Screen</Text> */}
+                {/* Header Wrapper */}
+                <View style={styles.headerWrapper}>
+                    <Image source={require('../assets/images/avatar.png')} style={styles.headerImage} />
+                    <MaterialCommunityIcons size={30} name='menu' style={styles.headerIcon} />
+                </View>
+                {/* under Header Wrapper */}
+                <View style={styles.underWrapper}>
+                    <Text style={styles.textHeader}>Food</Text>
+                    <Text style={styles.textTitle}>Delivery</Text>
+                </View>
+                {/* search sWrapper */}
+                <View style={styles.searchWrapper}>
+                    <EvilIcons name="search" size={28} color="black" />
+                    <View style={styles.searchButton}>
+                        <TextInput
+                            // onChangeText={onChangeNumber}
+                            // value={number}
+                            placeholder="Search...."
+                        />
+                        <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+                    </View>
+                </View>
+                {/* Categories Wrapper */}
+                <View style={styles.categoriesWrapper}>
+                    <Text style={styles.categoriesTitle}>
+                        Categories
+                    </Text>
+                    <View style={styles.categoriesListWrapper}>
+                        <FlatList
+                            data={categoriesData}
+                            renderItem={renderCategoryItem}
+                            keyExtractor={item => item.id}
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    </View>
+                </View>
+                {/* Popular Wrapper */}
+                <View style={styles.popularWrapper}>
+                    <Text style={styles.popularTitle}>
+                        Popular
+                    </Text>
+                    <View style={styles.popularListWrapper}>
+                        <FlatList
+                            data={popularData}
+                            renderItem={renderPopularItem}
+                            keyExtractor={item => item.id}
+                            showsVerticalScrollIndicator={false}
+                            horizontal={false}
+                        />
+                    </View>
+                </View>
+            </ScrollView>
         </View>
     );
 }
@@ -17,17 +101,80 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: 40,
+        paddingHorizontal: 20,
+    },
+    mainContainer: {},
+    headerWrapper: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        paddingTop: 20,
     },
     title: {
         color: Colors['light'].cyan,
         fontSize: 20,
         fontWeight: 'bold',
     },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
+    headerImage: {
+        width: 40,
+        height: 40,
+        borderRadius: 50,
     },
+    headerIcon: {
+
+    },
+    underWrapper: {
+        paddingTop: 30,
+    },
+    textHeader: {
+        fontSize: 16,
+        fontFamily: 'Helvetica',
+        color: Colors['light'].text,
+        paddingBottom: 5
+    },
+    textTitle: {
+        fontFamily: 'Helvetica',
+        fontSize: 32,
+        fontWeight: 'bold',
+    },
+    separator: {
+        height: 1,
+        width: '100%',
+        marginTop: 6,
+    },
+    searchWrapper: {
+        flexDirection: 'row',
+        paddingTop: 30
+    },
+    searchButton: {
+        paddingLeft: 8,
+        flexDirection: 'column',
+        width: '90%',
+        // backgroundColor: Colors['light'].cyan
+    },
+    categoriesWrapper: {
+        paddingTop: 30,
+    },
+    categoriesTitle: {
+        fontSize: 16,
+        fontFamily: 'Helvetica',
+        fontWeight: 'bold',
+    },
+    categoriesListWrapper: {
+        paddingVertical: 15,
+        backgroundColor: '#Ffffff'
+    },
+    popularTitle: {
+        fontSize: 16,
+        fontFamily: 'Helvetica',
+        fontWeight: 'bold',
+    },
+    popularWrapper: {
+        justifyContent: 'center',
+        paddingBottom: 10,
+    },
+    popularListWrapper: {
+        paddingVertical: 20,
+    }
 });
